@@ -1,37 +1,24 @@
 
-from tensorflow.python.keras import models , optimizers , losses ,activations
-from tensorflow.python.keras.layers import *
+from tensorflow.keras import models , optimizers , losses ,activations
+from tensorflow.keras.layers import *
 import tensorflow as tf
 import time
 
 class Classifier (object) :
 
 	def __init__( self , number_of_classes , maxlen ):
-
-		tf.logging.set_verbosity( tf.logging.ERROR )
-
 		dropout_rate = 0.5
-
 		input_shape = ( maxlen ,  )
 		target_shape = ( maxlen , 1 )
-
-		# Note : activations.leaky_relu is a CUSTOM IMPLEMENTATION. It DOES NOT EXIST in the official TensorFlow build.
-
 		self.model_scheme = [
-
 			Reshape( input_shape=input_shape , target_shape=( maxlen , 1 ) ),
-
-			Conv1D( 128, kernel_size=2 , strides=1, activation=activations.leaky_relu , kernel_regularizer='l1'),
+			Conv1D( 128, kernel_size=2 , strides=1, activation=activations.relu , kernel_regularizer='l1'),
 			MaxPooling1D(pool_size=2 ),
-
 			Flatten() ,
-
-			Dense( 64 , activation=activations.leaky_relu ) ,
+			Dense( 64 , activation=activations.relu ) ,
 			BatchNormalization(),
 			Dropout(dropout_rate),
-
 			Dense( number_of_classes, activation=tf.nn.softmax )
-
 		]
 
 		self.__model = tf.keras.Sequential(self.model_scheme)
@@ -71,7 +58,6 @@ class Classifier (object) :
 
 	def save_model(self , file_path ):
 		self.__model.save(file_path )
-
 
 	def load_model(self , file_path ):
 		self.__model = models.load_model(file_path)

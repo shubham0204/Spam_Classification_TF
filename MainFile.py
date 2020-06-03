@@ -1,8 +1,6 @@
 
-from tensorflow.python.keras.callbacks import TensorBoard
 from Model import Classifier
 import numpy as np
-import time
 
 X = np.load( 'processed_data/x.npy')
 Y = np.load( 'processed_data/y.npy')
@@ -19,8 +17,8 @@ classifier = Classifier( number_of_classes=2 , maxlen=171 )
 
 parameters = {
     'batch_size' : 100 ,
-    'epochs' : 100 ,
-    'callbacks' : [ TensorBoard( log_dir='logs/{}'.format( time.time() ) ) ] ,
+    'epochs' : 1 ,
+    'callbacks' : None ,
     'val_data' : ( test_X , test_Y )
 }
 classifier.fit( X , Y , parameters )
